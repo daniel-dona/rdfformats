@@ -1,0 +1,12 @@
+[package]
+name = "rdformats"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "rdformats"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = "0.22.0"
+oxrdfio = "0.1.1"
