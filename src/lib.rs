@@ -8,11 +8,25 @@ use oxrdfio::{RdfFormat, RdfParser, RdfSerializer};
 /// Formats the sum of two numbers as string.
 #[pyfunction]
 fn convert(from_file: &str, to_file: &str, from_format: &str, to_format: &str) -> PyResult<u64> {
-    let from_format_value = RdfFormat::from_extension(from_file)
-        .ok_or(PyValueError::new_err(format!("Wrong value for format: {from_format}")))?;
+    let from_format_value = match from_format {
+        "ttl" => RdfFormat::Turtle,
+        "nt" => RdfFormat::NTriples,
+        "nq" => RdfFormat::NQuads,
+        "n3" => RdfFormat::N3,
+        "trig" => RdfFormat::TriG,
+        "rdf/xml" => RdfFormat::RdfXml, 
+        _ => return Err(PyValueError::new_err(format!("Wrong value for format: {from_format}"))),
+    };
 
-    let to_format_value = RdfFormat::from_extension(to_file)
-        .ok_or(PyValueError::new_err(format!("Wrong value for format: {to_format}")))?;
+    let to_format_value = match to_format {
+        "ttl" => RdfFormat::Turtle,
+        "nt" => RdfFormat::NTriples,
+        "nq" => RdfFormat::NQuads,
+        "n3" => RdfFormat::N3,
+        "trig" => RdfFormat::TriG,
+        "rdf/xml" => RdfFormat::RdfXml, 
+        _ => return Err(PyValueError::new_err(format!("Wrong value for format: {}", from_format))),
+    };
 
     // Open input and output files
     let from_file = std::fs::File::open(from_file)?;
